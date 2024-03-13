@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Coling.API.Afiliados.Contratos;
 using Coling.API.Afiliados.Implementacion;
+using Coling.Shared;
 
 
 var host = new HostBuilder()
@@ -24,6 +25,17 @@ var host = new HostBuilder()
         services.AddDbContext<Contexto>(options => options.UseSqlServer(
                    configuration.GetConnectionString("cadenaConexion")));
         services.AddScoped<IPersonaLogic, PersonaLogic>();
+        services.AddScoped<ITelefonoLogic, TelefonoLogic>();
+        services.AddScoped<IDireccionLogic, DireccionLogic>();
+        services.AddScoped<ITipoSocialLogic, TipoSocialLogic>();
+        services.AddScoped<IPersonaTipoSocialLogic, PersonaTipoSocialLogic>();
+        services.AddScoped<IAfiliadoLogic, AfiliadoLogic>();
+        services.AddScoped<IGradoAcademicoLogic, GradoAcademicoLogic>();
+        services.AddScoped<IProfesionLogic, ProfesionLogic>();
+        services.AddScoped<IProfesionAfiliadoLogic, ProfesionAfiliadoLogic>();
+        services.AddScoped<IIdiomaLogic, IdiomaLogic>();
+        services.AddScoped<IIdiomaAfiliadoLogic, IdiomaAfiliadoLogic>();
+
 
     })
     .Build();

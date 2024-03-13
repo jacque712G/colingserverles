@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Coling.API.Afiliados.Implementacion
@@ -17,9 +18,18 @@ namespace Coling.API.Afiliados.Implementacion
         {
             this.contexto = contexto;
         }
-        public Task<bool> EliminarPersona(int id)
+        public async Task<bool> EliminarPersona(int id)
         {
-            throw new NotImplementedException();
+            bool sw = false;
+            Persona? existe = await contexto.Personas.FindAsync(id);
+            if (existe != null)
+            {
+                contexto.Personas.Remove(existe);
+                await contexto.SaveChangesAsync();
+                sw= true;
+            }
+            return sw;
+
         }
 
         public async Task<bool> InsertarPersona(Persona persona)
@@ -40,14 +50,30 @@ namespace Coling.API.Afiliados.Implementacion
             return lista;
         }
 
-        public Task<bool> ModificarPersona(Persona persona, int id)
+        public async Task<bool> ModificarPersona(Persona persona, int id)
         {
-            throw new NotImplementedException();
+            bool sw = false;
+            Persona? existe = await contexto.Personas.FindAsync(id);
+            if (existe != null)
+            {
+                existe.CI = persona.CI;
+                existe.Nombre = persona.Nombre;
+                existe.Apellidos = persona.Apellidos;
+                existe.FechaNacimiento = persona.FechaNacimiento;
+                existe.Foto = persona.Foto;
+                existe.Estado = persona.Estado;
+
+                await contexto.SaveChangesAsync();
+                sw= true;
+            }
+
+            return sw;
         }
 
-        public Task<Persona> ObtenerPersonaById(int id)
+        public async Task<Persona> ObtenerPersonaById(int id)
         {
-            throw new NotImplementedException();
+            Persona? persona = await contexto.Personas.FirstOrDefaultAsync(x => x.Id == id);           
+            return persona;           
         }
     }
 }
