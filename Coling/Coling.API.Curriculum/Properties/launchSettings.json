@@ -3,7 +3,9 @@
     "Coling.API.Curriculum": {
       "commandName": "Project",
       "commandLineArgs": "--port 7077",
-      "launchBrowser": false
+      "environmentVariables": {
+        "cadenaconexion": "BlobEndpoint=https://colingguerrerodb.blob.core.windows.net/;QueueEndpoint=https://colingguerrerodb.queue.core.windows.net/;FileEndpoint=https://colingguerrerodb.file.core.windows.net/;TableEndpoint=https://colingguerrerodb.table.core.windows.net/;SharedAccessSignature=sv=2022-11-02&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2024-05-02T10:26:08Z&st=2024-03-15T02:26:08Z&spr=https&sig=p3J%2F1VG07CQ1ZsIVn1swX7aFPfX7t6BV7Z56h6wqSuw%3D"
+      }
     }
   }
 }
