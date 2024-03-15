@@ -86,29 +86,6 @@ namespace Coling.API.Afiliados.Migrations
                     b.ToTable("Direcciones");
                 });
 
-            modelBuilder.Entity("Coling.Shared.GradoAcademico", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Estado")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("NombreGrado")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("GradosAcademicos");
-                });
-
             modelBuilder.Entity("Coling.Shared.Idioma", b =>
                 {
                     b.Property<int>("Id")
@@ -227,34 +204,6 @@ namespace Coling.API.Afiliados.Migrations
                     b.ToTable("PersonasTiposSociales");
                 });
 
-            modelBuilder.Entity("Coling.Shared.Profesion", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Estado")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<int>("IdGrado")
-                        .HasColumnType("int");
-
-                    b.Property<string>("NombreProfesion")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdGrado");
-
-                    b.ToTable("Profesiones");
-                });
-
             modelBuilder.Entity("Coling.Shared.ProfesionAfiliado", b =>
                 {
                     b.Property<int>("Id")
@@ -274,8 +223,9 @@ namespace Coling.API.Afiliados.Migrations
                     b.Property<int>("IdAfiliado")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdProfesion")
-                        .HasColumnType("int");
+                    b.Property<string>("IdProfesion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NroSelloSib")
                         .IsRequired()
@@ -285,8 +235,6 @@ namespace Coling.API.Afiliados.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("IdAfiliado");
-
-                    b.HasIndex("IdProfesion");
 
                     b.ToTable("ProfesionesAfiliados");
                 });
@@ -344,103 +292,84 @@ namespace Coling.API.Afiliados.Migrations
 
             modelBuilder.Entity("Coling.Shared.Afiliado", b =>
                 {
-                    b.HasOne("Coling.Shared.Persona", "Personas")
+                    b.HasOne("Coling.Shared.Persona", "Persona")
                         .WithMany()
                         .HasForeignKey("IdPersona")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Personas");
+                    b.Navigation("Persona");
                 });
 
             modelBuilder.Entity("Coling.Shared.Direccion", b =>
                 {
-                    b.HasOne("Coling.Shared.Persona", "Personas")
+                    b.HasOne("Coling.Shared.Persona", "Persona")
                         .WithMany()
                         .HasForeignKey("IdPersona")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Personas");
+                    b.Navigation("Persona");
                 });
 
             modelBuilder.Entity("Coling.Shared.IdiomaAfiliado", b =>
                 {
-                    b.HasOne("Coling.Shared.Afiliado", "Afiliados")
+                    b.HasOne("Coling.Shared.Afiliado", "Afiliado")
                         .WithMany()
                         .HasForeignKey("IdAfiliado")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Coling.Shared.Idioma", "Idiomas")
+                    b.HasOne("Coling.Shared.Idioma", "Idioma")
                         .WithMany()
                         .HasForeignKey("IdIdioma")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Afiliados");
+                    b.Navigation("Afiliado");
 
-                    b.Navigation("Idiomas");
+                    b.Navigation("Idioma");
                 });
 
             modelBuilder.Entity("Coling.Shared.PersonaTipoSocial", b =>
                 {
-                    b.HasOne("Coling.Shared.Persona", "Personas")
+                    b.HasOne("Coling.Shared.Persona", "Persona")
                         .WithMany()
                         .HasForeignKey("IdPersona")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Coling.Shared.TipoSocial", "TipoSociales")
+                    b.HasOne("Coling.Shared.TipoSocial", "TipoSocial")
                         .WithMany()
                         .HasForeignKey("IdTipoSocial")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Personas");
+                    b.Navigation("Persona");
 
-                    b.Navigation("TipoSociales");
-                });
-
-            modelBuilder.Entity("Coling.Shared.Profesion", b =>
-                {
-                    b.HasOne("Coling.Shared.GradoAcademico", "GradosAcademicos")
-                        .WithMany()
-                        .HasForeignKey("IdGrado")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("GradosAcademicos");
+                    b.Navigation("TipoSocial");
                 });
 
             modelBuilder.Entity("Coling.Shared.ProfesionAfiliado", b =>
                 {
-                    b.HasOne("Coling.Shared.Afiliado", "Afiliados")
+                    b.HasOne("Coling.Shared.Afiliado", "Afiliado")
                         .WithMany()
                         .HasForeignKey("IdAfiliado")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Coling.Shared.Profesion", "Profesiones")
-                        .WithMany()
-                        .HasForeignKey("IdProfesion")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Afiliados");
-
-                    b.Navigation("Profesiones");
+                    b.Navigation("Afiliado");
                 });
 
             modelBuilder.Entity("Coling.Shared.Telefono", b =>
                 {
-                    b.HasOne("Coling.Shared.Persona", "Personas")
+                    b.HasOne("Coling.Shared.Persona", "Persona")
                         .WithMany()
                         .HasForeignKey("IdPersona")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Personas");
+                    b.Navigation("Persona");
                 });
 #pragma warning restore 612, 618
         }

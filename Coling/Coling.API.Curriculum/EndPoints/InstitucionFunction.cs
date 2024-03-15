@@ -72,12 +72,12 @@ namespace Coling.API.Curriculum.EndPoints
         }
 
         [Function("ObtenerInstitucionById")]
-        public async Task<HttpResponseData> ObtenerInstitucionById([HttpTrigger(AuthorizationLevel.Function, "get",Route = "obtenerInstitucionById/{id}")] HttpRequestData req,string id)
+        public async Task<HttpResponseData> ObtenerInstitucionById([HttpTrigger(AuthorizationLevel.Function, "get",Route = "obtenerInstitucionById/{rowkey}")] HttpRequestData req,string rowkey)
         {
             HttpResponseData respuesta;
             try
             {
-                var institucion = repos.Get(id);
+                var institucion = repos.GetById(rowkey);
                 respuesta = req.CreateResponse(HttpStatusCode.OK);
                 await respuesta.WriteAsJsonAsync(institucion.Result);
                 return respuesta;
