@@ -1,4 +1,5 @@
 using Coling.API.Curriculum.Contratos.Repositorio;
+using Coling.API.Curriculum.Implementacion.Repositorio;
 using Coling.API.Curriculum.Implementacion.Repositorios;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,9 @@ var host = new HostBuilder()
         services.AddApplicationInsightsTelemetryWorkerService();
         services.ConfigureFunctionsApplicationInsights();
         services.AddScoped<IInstitucionRepositorio, InstitucionRepositorio>();
+        services.AddScoped<IEstudiosRepositorio, EstudiosRepositorio>();
+        services.AddScoped<IExperienciaLaboralRepositorio,ExperienciaLaboralRepositorio>();
+        services.AddScoped<IProfesionRepositorio,ProfesionRepositorio>();
     })
     .Build();
 

@@ -11,12 +11,12 @@ namespace Coling.API.Curriculum.Modelo
 {
     public class Institucion:IInstitucion,ITableEntity
     {
-        public string Nombre { get; set; }
-        public string Tipo { get; set; }
-        public string Direccion { get; set; }
-        public string Estado { get; set; }
-        public string PartitionKey { get; set; }
-        public string RowKey { get; set ; }
+        public string Nombre { get; set; } = null!;
+        public string Tipo { get; set; } = null!;
+        public string Direccion { get; set; } = null!;
+        public string Estado { get; set; } = null!;
+        public string PartitionKey { get; set; } = null!;
+        public string RowKey { get; set ; } = null!;
         public DateTimeOffset? Timestamp { get; set; }
         public ETag ETag { get; set; }
     }

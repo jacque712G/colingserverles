@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 
 namespace Coling.API.Curriculum.Contratos.Repositorio
 {
-    public interface IInstitucionRepositorio
+    public interface IProfesionRepositorio
     {
-        public Task<bool> Create(Institucion institucion);
-        public Task<bool> Update(Institucion institucion);
+        public Task<bool> Create(Profesion profesion);
+        public Task<bool> Update(Profesion profesion);
         public Task<bool> Delete(string partitionkey,string rowkey);
-        public Task<List<Institucion>> GetAll();
-        public Task<Institucion> GetById(string rowkey);
-
+        public Task<List<Profesion>> GetAll();
+        public Task<Profesion> GetById(string rowkey);
     }
 }

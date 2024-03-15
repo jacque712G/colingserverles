@@ -17,7 +17,7 @@ namespace Coling.API.Curriculum.Implementacion.Repositorios
         private readonly IConfiguration configuration;
         public InstitucionRepositorio(IConfiguration conf) 
         {
-         configuration = conf;
+            configuration = conf;
             cadenaConexion = configuration.GetSection("cadenaconexion").Value;
             tablaNombre = "Institucion";
         }
@@ -52,10 +52,10 @@ namespace Coling.API.Curriculum.Implementacion.Repositorios
             }
         }
 
-        public async Task<Institucion> Get(string id)
+        public async Task<Institucion> GetById(string rowkey)
         {
             var tablaCliente = new TableClient(cadenaConexion, tablaNombre);
-            var filtro = $"PartitionKey eq 'Educacion' and RowKey eq '{id}'";
+            var filtro = $"PartitionKey eq 'Educacion' and RowKey eq '{rowkey}'";
             await foreach (Institucion institucion in tablaCliente.QueryAsync<Institucion>(filter: filtro))
             {
                 return institucion;
@@ -65,6 +65,7 @@ namespace Coling.API.Curriculum.Implementacion.Repositorios
 
         public async Task<List<Institucion>> GetAll()
         {
+            
             List<Institucion> lista = new List<Institucion>();
             var tablaCliente = new TableClient(cadenaConexion, tablaNombre);
             var filtro = $"PartitionKey eq 'Educacion'";

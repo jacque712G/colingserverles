@@ -29,9 +29,7 @@ var host = new HostBuilder()
         services.AddScoped<IDireccionLogic, DireccionLogic>();
         services.AddScoped<ITipoSocialLogic, TipoSocialLogic>();
         services.AddScoped<IPersonaTipoSocialLogic, PersonaTipoSocialLogic>();
-        services.AddScoped<IAfiliadoLogic, AfiliadoLogic>();
-        services.AddScoped<IGradoAcademicoLogic, GradoAcademicoLogic>();
-        services.AddScoped<IProfesionLogic, ProfesionLogic>();
+        services.AddScoped<IAfiliadoLogic, AfiliadoLogic>();       
         services.AddScoped<IProfesionAfiliadoLogic, ProfesionAfiliadoLogic>();
         services.AddScoped<IIdiomaLogic, IdiomaLogic>();
         services.AddScoped<IIdiomaAfiliadoLogic, IdiomaAfiliadoLogic>();
