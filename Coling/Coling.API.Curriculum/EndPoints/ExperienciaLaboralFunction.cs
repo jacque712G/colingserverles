@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using System.Net;
 
 namespace Coling.API.Curriculum.EndPoints
@@ -21,6 +23,8 @@ namespace Coling.API.Curriculum.EndPoints
         }
 
         [Function("ListarExperiencia")]
+        [OpenApiOperation("Listarspec", "ListarExperiencia", Description = "Sirve para listar todas las Experiencias Laborales")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(List<ExperienciaLaboral>), Description = "Mostrara una Lista de Experiencias Laborales")]
         public async Task<HttpResponseData> ListarExperiencia([HttpTrigger(AuthorizationLevel.Function, "get", Route = "ListarExperiencia")] HttpRequestData req)
         {
             HttpResponseData respuesta;
@@ -40,6 +44,9 @@ namespace Coling.API.Curriculum.EndPoints
         }
 
         [Function("ObtenerExperienciaById")]
+        [OpenApiOperation("Obtenerspec", "ObtenerExperienciaById", Description = "Sirve para obtener una Experiencia Laboral")]
+        [OpenApiParameter(name: "rowkey", In = ParameterLocation.Path, Required = true, Type = typeof(string))]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ExperienciaLaboral), Description = "Mostrara una Experiencia Laboral")]
         public async Task<HttpResponseData> ObtenerExperienciaById([HttpTrigger(AuthorizationLevel.Function, "get", Route = "ObtenerExperienciaById/{rowkey}")] HttpRequestData req, string rowkey)
         {
             HttpResponseData respuesta;
@@ -58,6 +65,9 @@ namespace Coling.API.Curriculum.EndPoints
             }
         }
         [Function("InsertarExperiencia")]
+        [OpenApiOperation("Insertarspec", "InsertarExperiencia", Description = "Sirve para Insertar una Experiencia Laboral")]
+        [OpenApiRequestBody("application/json", typeof(ExperienciaLaboral), Description = "Experiencia Laboral modelo")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ExperienciaLaboral), Description = "Mostrara la Experiencia Laboral Creada")]
         public async Task<HttpResponseData> InsertarExperiencia([HttpTrigger(AuthorizationLevel.Function, "post", Route = "InsertarExperiencia")] HttpRequestData req)
         {
             HttpResponseData respuesta;
@@ -86,6 +96,9 @@ namespace Coling.API.Curriculum.EndPoints
             }
         }
         [Function("ModificarExperiencia")]
+        [OpenApiOperation("Modificarspec", "ModificarExperiencia", Description = "Sirve para Modificar una Experiencia Laboral")]
+        [OpenApiRequestBody("application/json", typeof(ExperienciaLaboral), Description = "Experiencia Laboral modelo")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ExperienciaLaboral), Description = "Mostrara la Experiencia Laboral Modificada")]
         public async Task<HttpResponseData> ModificarExperiencia([HttpTrigger(AuthorizationLevel.Function, "put", Route = "ModificarExperiencia")] HttpRequestData req)
         {
             HttpResponseData respuesta;
@@ -112,6 +125,9 @@ namespace Coling.API.Curriculum.EndPoints
             }
         }
         [Function("EliminarExperiencia")]
+        [OpenApiOperation("Eliminarspec", "EliminarExperiencia", Description = "Sirve para Eliminar una Experiencia Laboral")]
+        [OpenApiParameter(name: "partitionkey", In = ParameterLocation.Path, Required = true, Type = typeof(string))]
+        [OpenApiParameter(name: "rowkey", In = ParameterLocation.Path, Required = true, Type = typeof(string))]
         public async Task<HttpResponseData> EliminarExperiencia([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "EliminarExperiencia/{partitionkey}/{rowkey}")] HttpRequestData req, string partitionkey, string rowkey)
         {
             HttpResponseData respuesta;

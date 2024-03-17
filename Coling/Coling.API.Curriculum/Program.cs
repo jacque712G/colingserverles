@@ -2,6 +2,7 @@ using Coling.API.Curriculum.Contratos.Repositorio;
 using Coling.API.Curriculum.Implementacion.Repositorio;
 using Coling.API.Curriculum.Implementacion.Repositorios;
 using Microsoft.Azure.Functions.Worker;
+using Microsoft.Azure.Functions.Worker.Extensions.OpenApi.Extensions;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
