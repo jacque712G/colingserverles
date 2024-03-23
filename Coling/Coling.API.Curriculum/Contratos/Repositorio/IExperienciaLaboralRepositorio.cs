@@ -14,5 +14,6 @@ namespace Coling.API.Curriculum.Contratos.Repositorio
         public Task<bool> Delete(string partitionkey, string rowkey);
         public Task<List<ExperienciaLaboral>> GetAll();
         public Task<ExperienciaLaboral> GetById(string rowkey);
+        public Task<List<ExperienciaLaboral>> BuscarAfiliadoExperiencia(int idAfiliado);
     }
 }

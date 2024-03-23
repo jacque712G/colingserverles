@@ -25,7 +25,7 @@ namespace Coling.API.Curriculum.EndPoints
         [Function("ListarEstudios")]
         [OpenApiOperation("Listarspec", "ListarEstudios", Description = "Sirve para listar todos los Estudios")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(List<Estudios>), Description = "Mostrara una Lista de Estudios")]
-        public async Task<HttpResponseData> ListarEstudios([HttpTrigger(AuthorizationLevel.Function, "get",Route = "ListarEstudios")] HttpRequestData req)
+        public async Task<HttpResponseData> ListarEstudios([HttpTrigger(AuthorizationLevel.Anonymous, "get",Route = "ListarEstudios")] HttpRequestData req)
         {
             HttpResponseData respuesta;
             try
@@ -47,7 +47,7 @@ namespace Coling.API.Curriculum.EndPoints
         [OpenApiOperation("Obtenerspec", "ObtenerEstudioById", Description = "Sirve para obtener un Estudio")]
         [OpenApiParameter(name: "rowkey", In = ParameterLocation.Path, Required = true, Type = typeof(string))]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Estudios), Description = "Mostrara un Estudio")]
-        public async Task<HttpResponseData> ObtenerEstudioById([HttpTrigger(AuthorizationLevel.Function,"get",Route = "ObtenerEstudioById/{rowkey}")] HttpRequestData req,string rowkey) 
+        public async Task<HttpResponseData> ObtenerEstudioById([HttpTrigger(AuthorizationLevel.Anonymous,"get",Route = "ObtenerEstudioById/{rowkey}")] HttpRequestData req,string rowkey) 
         {
             HttpResponseData respuesta;
             try
@@ -64,11 +64,32 @@ namespace Coling.API.Curriculum.EndPoints
                 return respuesta;
             }
         }
+        [Function("BuscarAfiliadoEstudios")]
+        [OpenApiOperation("Buscarspec", "BuscarAfiliadoEstudios", Description = "Sirve para listar todos los Estudios de un Afiliado")]
+        [OpenApiParameter(name: "idAfiliado", In = ParameterLocation.Path, Required = true, Type = typeof(int))]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(List<Estudios>), Description = "Mostrara una Lista de Estudios de un Afiliado")]
+        public async Task<HttpResponseData> BuscarAfiliadoEstudios([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "BuscarAfiliadoEstudios/{idAfiliado}")] HttpRequestData req,int idAfiliado)
+        {
+            HttpResponseData respuesta;
+            try
+            {
+                var lista = repos.BuscarAfiliadoEstudios(idAfiliado);
+                respuesta = req.CreateResponse(HttpStatusCode.OK);
+                await respuesta.WriteAsJsonAsync(lista.Result);
+                return respuesta;
+            }
+            catch (Exception)
+            {
+
+                respuesta = req.CreateResponse(HttpStatusCode.InternalServerError);
+                return respuesta;
+            }
+        }
         [Function("InsertarEstudio")]
         [OpenApiOperation("Insertarspec", "InsertarEstudio", Description = "Sirve para Insertar un Estudio")]
         [OpenApiRequestBody("application/json", typeof(Estudios), Description = "Estudio modelo")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Estudios), Description = "Mostrara el Estudio Creado")]
-        public async Task<HttpResponseData> InsertarEstudio([HttpTrigger(AuthorizationLevel.Function,"post",Route = "InsertarEstudio")] HttpRequestData req) 
+        public async Task<HttpResponseData> InsertarEstudio([HttpTrigger(AuthorizationLevel.Anonymous,"post",Route = "InsertarEstudio")] HttpRequestData req) 
         {
             HttpResponseData respuesta;
             try
@@ -99,7 +120,7 @@ namespace Coling.API.Curriculum.EndPoints
         [OpenApiOperation("Modificarspec", "ModificarEstudio", Description = "Sirve para Modificar un Estudio")]
         [OpenApiRequestBody("application/json", typeof(Estudios), Description = "Estudio modelo")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Estudios), Description = "Mostrara el Estudio Modificado")]
-        public async Task<HttpResponseData> ModificarEstudio([HttpTrigger(AuthorizationLevel.Function,"put",Route = "ModificarEstudio")] HttpRequestData req) 
+        public async Task<HttpResponseData> ModificarEstudio([HttpTrigger(AuthorizationLevel.Anonymous,"put",Route = "ModificarEstudio")] HttpRequestData req) 
         {
             HttpResponseData respuesta;
             try
@@ -128,7 +149,7 @@ namespace Coling.API.Curriculum.EndPoints
         [OpenApiOperation("Eliminarspec", "EliminarEstudio", Description = "Sirve para Eliminar un Estudio")]
         [OpenApiParameter(name: "partitionkey", In = ParameterLocation.Path, Required = true, Type = typeof(string))]
         [OpenApiParameter(name: "rowkey", In = ParameterLocation.Path, Required = true, Type = typeof(string))]
-        public async Task<HttpResponseData> EliminarEstudio([HttpTrigger(AuthorizationLevel.Function,"delete",Route = "EliminarEstudio/{partitionkey}/{rowkey}")] HttpRequestData req,string partitionkey,string rowkey) 
+        public async Task<HttpResponseData> EliminarEstudio([HttpTrigger(AuthorizationLevel.Anonymous,"delete",Route = "EliminarEstudio/{partitionkey}/{rowkey}")] HttpRequestData req,string partitionkey,string rowkey) 
         {
             HttpResponseData respuesta;
             try

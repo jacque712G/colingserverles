@@ -14,5 +14,6 @@ namespace Coling.API.Curriculum.Contratos.Repositorio
         public Task<bool> Delete(string partitionkey, string rowkey);
         public Task<List<Estudios>> GetAll();
         public Task<Estudios> GetById(string rowkey);
+        public Task<List<Estudios>> BuscarAfiliadoEstudios(int idAfiliado);
     }
 }

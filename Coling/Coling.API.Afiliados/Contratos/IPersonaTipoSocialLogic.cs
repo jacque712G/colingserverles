@@ -1,4 +1,5 @@
-﻿using Coling.Shared;
+﻿using Coling.API.Afiliados.DTO;
+using Coling.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,11 @@ namespace Coling.API.Afiliados.Contratos
 {
     public interface IPersonaTipoSocialLogic
     {
-        public Task<bool> InsertarPersonaTipoSocial(PersonaTipoSocial personaTipoSocial);
-        public Task<bool> ModificarPersonaTipoSocial(PersonaTipoSocial personaTipoSocial, int id);
+        public Task<bool> InsertarPersonaTipoSocial(PersonaTipoSocialDTO personaTipoSocial);
+        public Task<bool> ModificarPersonaTipoSocial(PersonaTipoSocialDTO personaTipoSocial, int id);
         public Task<bool> EliminarPersonaTipoSocial(int id);
-        public Task<List<PersonaTipoSocial>> ListarPersonaTipoSocialTodos();
-        public Task<PersonaTipoSocial> ObtenerPersonaTipoSocialById(int id);    
+        public Task<List<PersonaTipoSocialDTO>> ListarPersonaTipoSocialTodos();
+        public Task<PersonaTipoSocialDTO> ObtenerPersonaTipoSocialById(int id);
+        public Task<List<TipoSocialDTO>> BuscarPersonaTiposSociales(int idPersona);
     }
 }

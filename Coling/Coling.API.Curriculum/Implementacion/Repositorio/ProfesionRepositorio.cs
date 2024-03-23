@@ -19,7 +19,7 @@ namespace Coling.API.Curriculum.Implementacion.Repositorio
         public ProfesionRepositorio(IConfiguration conf) 
         {
             configuration = conf;
-            cadenaConexion = configuration.GetSection("cadenaconexion").Value;
+            cadenaConexion = Environment.GetEnvironmentVariable("cadenaconexion");
             tablaNombre = "Profesion";
         }
         public async Task<bool> Create(Profesion profesion)

@@ -1,4 +1,5 @@
 ﻿using Coling.API.Afiliados.Contratos;
+using Coling.API.Afiliados.DTO;
 using Coling.Shared;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -29,10 +30,10 @@ namespace Coling.API.Afiliados.Implementacion
             return sw;
         }
 
-        public async Task<bool> InsertarProfesionAfiliado(ProfesionAfiliado profesionAfiliado)
+        public async Task<bool> InsertarProfesionAfiliado(ProfesionAfiliadoDTO profesionAfiliado)
         {
             bool sw = false;
-            contexto.ProfesionesAfiliados.Add(profesionAfiliado);
+            contexto.ProfesionesAfiliados.Add(map(profesionAfiliado));
             int response = await contexto.SaveChangesAsync();
             if (response==1)
             {
@@ -41,13 +42,22 @@ namespace Coling.API.Afiliados.Implementacion
             return sw;
         }
 
-        public async Task<List<ProfesionAfiliado>> ListarProfesionAfliadoTodos()
+        public async Task<List<ProfesionAfiliadoDTO>> ListarProfesionAfliadoTodos()
         {
-            var lista = await contexto.ProfesionesAfiliados.ToListAsync();
+            var lista = await contexto.ProfesionesAfiliados
+                                       .Select(x=>new ProfesionAfiliadoDTO 
+                                       { 
+                                        Id= x.Id,
+                                        IdAfiliado= x.IdAfiliado,
+                                        IdProfesion= x.IdProfesion,
+                                        FechaAsignacion= x.FechaAsignacion,
+                                        NroSelloSib= x.NroSelloSib,
+                                        Estado= x.Estado
+                                       }).ToListAsync();
             return lista;
         }
 
-        public async Task<bool> ModificarProfesionAfiliado(ProfesionAfiliado profesionAfiliado, int id)
+        public async Task<bool> ModificarProfesionAfiliado(ProfesionAfiliadoDTO profesionAfiliado, int id)
         {
             bool sw = false;
             ProfesionAfiliado? existe = await contexto.ProfesionesAfiliados.FindAsync(id);
@@ -64,10 +74,50 @@ namespace Coling.API.Afiliados.Implementacion
             return sw;
         }
 
-        public async Task<ProfesionAfiliado> ObtenerProfesionAfiliadoById(int id)
+        public async Task<ProfesionAfiliadoDTO> ObtenerProfesionAfiliadoById(int id)
         {
             ProfesionAfiliado? profesionAfiliado = await contexto.ProfesionesAfiliados.FirstOrDefaultAsync(x=>x.Id==id);
-            return profesionAfiliado;
+            ProfesionAfiliadoDTO profAfiliado =null!;
+            if (profesionAfiliado!=null)
+            {
+                profAfiliado = new ProfesionAfiliadoDTO();
+                profAfiliado.Id = profesionAfiliado.Id;
+                profAfiliado.IdAfiliado = profesionAfiliado.IdAfiliado;
+                profAfiliado.IdProfesion = profesionAfiliado.IdProfesion;
+                profAfiliado.FechaAsignacion = profesionAfiliado.FechaAsignacion;
+                profAfiliado.NroSelloSib = profesionAfiliado.NroSelloSib;
+                profAfiliado.Estado = profesionAfiliado.Estado;
+            }
+           
+
+            return profAfiliado;
         }
+        public async Task<List<ProfesionAfiliadoDTO>> BuscarAfiliadoProfesiones(int idAfiliado)
+        {
+            var lista = await contexto.ProfesionesAfiliados
+                                      .Where(a=>a.IdAfiliado==idAfiliado)
+                                      .Select(x => new ProfesionAfiliadoDTO
+                                      {
+                                          Id = x.Id,
+                                          IdAfiliado = x.IdAfiliado,
+                                          IdProfesion = x.IdProfesion,
+                                          FechaAsignacion = x.FechaAsignacion,
+                                          NroSelloSib = x.NroSelloSib,
+                                          Estado = x.Estado
+                                      }).ToListAsync();
+            return lista;
+        }
+        public ProfesionAfiliado map(ProfesionAfiliadoDTO profesionAfiliado) 
+        {
+            ProfesionAfiliado profAfiliado=new ProfesionAfiliado();
+            profAfiliado.IdAfiliado= profesionAfiliado.IdAfiliado;
+            profAfiliado.IdProfesion = profesionAfiliado.IdProfesion;
+            profAfiliado.FechaAsignacion = profesionAfiliado.FechaAsignacion;
+            profAfiliado.NroSelloSib = profesionAfiliado.NroSelloSib;
+            profAfiliado.Estado = profesionAfiliado.Estado;
+            return profAfiliado;
+        }
+
+        
     }
 }

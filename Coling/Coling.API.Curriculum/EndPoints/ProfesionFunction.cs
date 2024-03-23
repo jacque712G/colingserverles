@@ -25,7 +25,7 @@ namespace Coling.API.Curriculum.EndPoints
         [Function("ListarProfesion")]
         [OpenApiOperation("Listarspec", "ListarProfesion", Description = "Sirve para listar todas las Profesiones")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(List<Profesion>), Description = "Mostrara una Lista de Profesiones")]
-        public async Task<HttpResponseData> ListarProfesion([HttpTrigger(AuthorizationLevel.Function, "get", Route = "ListarProfesion")] HttpRequestData req)
+        public async Task<HttpResponseData> ListarProfesion([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ListarProfesion")] HttpRequestData req)
         {
             HttpResponseData respuesta;
             try
@@ -47,7 +47,7 @@ namespace Coling.API.Curriculum.EndPoints
         [OpenApiOperation("Obtenerspec", "ObtenerProfesionById", Description = "Sirve para obtener una Profesion")]
         [OpenApiParameter(name: "rowkey", In = ParameterLocation.Path, Required = true, Type = typeof(string))]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Profesion), Description = "Mostrara una Profesion")]
-        public async Task<HttpResponseData> ObtenerProfesionById([HttpTrigger(AuthorizationLevel.Function, "get", Route = "ObtenerProfesionById/{rowkey}")] HttpRequestData req, string rowkey)
+        public async Task<HttpResponseData> ObtenerProfesionById([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ObtenerProfesionById/{rowkey}")] HttpRequestData req, string rowkey)
         {
             HttpResponseData respuesta;
             try
@@ -68,7 +68,7 @@ namespace Coling.API.Curriculum.EndPoints
         [OpenApiOperation("Insertarspec", "InsertarProfesion", Description = "Sirve para Insertar una Profesion")]
         [OpenApiRequestBody("application/json", typeof(Profesion), Description = "Profesion modelo")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Profesion), Description = "Mostrara la Profesion Creada")]
-        public async Task<HttpResponseData> InsertarProfesion([HttpTrigger(AuthorizationLevel.Function, "post", Route = "InsertarProfesion")] HttpRequestData req)
+        public async Task<HttpResponseData> InsertarProfesion([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "InsertarProfesion")] HttpRequestData req)
         {
             HttpResponseData respuesta;
             try
@@ -99,7 +99,7 @@ namespace Coling.API.Curriculum.EndPoints
         [OpenApiOperation("Modificarspec", "ModificarProfesion", Description = "Sirve para Modificar una Profesion")]
         [OpenApiRequestBody("application/json", typeof(Profesion), Description = "Profesion modelo")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ExperienciaLaboral), Description = "Mostrara la Profesion Modificada")]
-        public async Task<HttpResponseData> ModificarProfesion([HttpTrigger(AuthorizationLevel.Function, "put", Route = "ModificarProfesion")] HttpRequestData req)
+        public async Task<HttpResponseData> ModificarProfesion([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "ModificarProfesion")] HttpRequestData req)
         {
             HttpResponseData respuesta;
             try
@@ -128,7 +128,7 @@ namespace Coling.API.Curriculum.EndPoints
         [OpenApiOperation("Eliminarspec", "EliminarProfesion", Description = "Sirve para Eliminar una Profesion")]
         [OpenApiParameter(name: "partitionkey", In = ParameterLocation.Path, Required = true, Type = typeof(string))]
         [OpenApiParameter(name: "rowkey", In = ParameterLocation.Path, Required = true, Type = typeof(string))]
-        public async Task<HttpResponseData> EliminarProfesion([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "EliminarProfesion/{partitionkey}/{rowkey}")] HttpRequestData req, string partitionkey, string rowkey)
+        public async Task<HttpResponseData> EliminarProfesion([HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "EliminarProfesion/{partitionkey}/{rowkey}")] HttpRequestData req, string partitionkey, string rowkey)
         {
             HttpResponseData respuesta;
             try

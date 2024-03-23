@@ -18,9 +18,10 @@ namespace Coling.API.Curriculum.Implementacion.Repositorio
         public ExperienciaLaboralRepositorio(IConfiguration conf) 
         { 
             configuration = conf;
-            cadenaConexion = configuration.GetSection("cadenaconexion").Value;
+            cadenaConexion = Environment.GetEnvironmentVariable("cadenaconexion");
             tablaNombre = "ExperienciaLaboral";
-        }
+        }      
+
         public async Task<bool> Create(ExperienciaLaboral experiencia)
         {
             try
@@ -84,6 +85,19 @@ namespace Coling.API.Curriculum.Implementacion.Repositorio
 
                 return false;
             }
+        }
+        public async Task<List<ExperienciaLaboral>> BuscarAfiliadoExperiencia(int idAfiliado)
+        {
+            List<ExperienciaLaboral> lista = new List<ExperienciaLaboral>();
+            var tablaCliente = new TableClient(cadenaConexion, tablaNombre);
+            var filtro = "IdAfiliado eq " + idAfiliado + "";
+            var experiencias = tablaCliente.QueryAsync<ExperienciaLaboral>(filter: filtro);
+
+            await foreach (ExperienciaLaboral experiencia in experiencias)
+            {
+                lista.Add(experiencia);
+            }
+            return lista;
         }
     }
 }

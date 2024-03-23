@@ -78,7 +78,7 @@ namespace Coling.API.Afiliados.Implementacion
         public async Task<Afiliado> ObtenerAfiliadoById(int id)
         {
             Afiliado? afiliado = await contexto.Afiliados.Include(x=>x.Persona).FirstOrDefaultAsync(x => x.Id == id);
-            return afiliado;
+            return afiliado!;
         }
     }
 }

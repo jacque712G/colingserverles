@@ -1,4 +1,5 @@
-﻿using Coling.Shared;
+﻿using Coling.API.Afiliados.DTO;
+using Coling.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,12 @@ namespace Coling.API.Afiliados.Contratos
 {
     public interface IIdiomaAfiliadoLogic
     {
-        public Task<bool> InsertarIdiomaAfiliado(IdiomaAfiliado idiomaAfiliado);
-        public Task<bool> ModificarIdiomaAfiliado(IdiomaAfiliado idiomaAfiliado,int id);
+        public Task<bool> InsertarIdiomaAfiliado(IdiomaAfiliadoDTO idiomaAfiliado);
+        public Task<bool> ModificarIdiomaAfiliado(IdiomaAfiliadoDTO idiomaAfiliado,int id);
         public Task<bool> EliminarIdiomaAfiliado(int id);
-        public Task<List<IdiomaAfiliado>> ListarIdiomaAfiliadoTodos();
-        public Task<IdiomaAfiliado> ObtenerIdiomaAfiliadoById(int id);
+        public Task<List<IdiomaAfiliadoDTO>> ListarIdiomaAfiliadoTodos();
+        public Task<IdiomaAfiliadoDTO> ObtenerIdiomaAfiliadoById(int id);
+
+        public Task<List<IdiomaDTO>> BuscarAfiliadoIdiomas(int idAfiliado);
     }
 }

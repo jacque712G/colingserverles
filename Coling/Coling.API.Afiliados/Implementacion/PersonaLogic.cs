@@ -73,7 +73,7 @@ namespace Coling.API.Afiliados.Implementacion
         public async Task<Persona> ObtenerPersonaById(int id)
         {
             Persona? persona = await contexto.Personas.FirstOrDefaultAsync(x => x.Id == id);           
-            return persona;           
+            return persona!;           
         }
     }
 }

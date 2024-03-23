@@ -1,4 +1,5 @@
 ﻿using Coling.API.Afiliados.Contratos;
+using Coling.API.Afiliados.DTO;
 using Coling.Shared;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -29,10 +30,10 @@ namespace Coling.API.Afiliados.Implementacion
             return sw;
         }
 
-        public async Task<bool> InsertarPersonaTipoSocial(PersonaTipoSocial personaTipoSocial)
+        public async Task<bool> InsertarPersonaTipoSocial(PersonaTipoSocialDTO personaTipoSocial)
         {
             bool sw = false;
-            contexto.PersonasTiposSociales.Add(personaTipoSocial);
+            contexto.PersonasTiposSociales.Add(map(personaTipoSocial));
             int response = await contexto.SaveChangesAsync();
             if (response==1)
             {
@@ -41,13 +42,20 @@ namespace Coling.API.Afiliados.Implementacion
             return sw;
         }
 
-        public async Task<List<PersonaTipoSocial>> ListarPersonaTipoSocialTodos()
+        public async Task<List<PersonaTipoSocialDTO>> ListarPersonaTipoSocialTodos()
         {
-            var lista = await contexto.PersonasTiposSociales.ToListAsync();
+            var lista = await contexto.PersonasTiposSociales
+                              .Select(x=> new PersonaTipoSocialDTO 
+                              { 
+                               Id = x.Id,
+                               IdPersona = x.IdPersona,
+                               IdTipoSocial = x.IdTipoSocial,
+                               Estado = x.Estado,
+                              }).ToListAsync();
             return lista;
         }
 
-        public async Task<bool> ModificarPersonaTipoSocial(PersonaTipoSocial personaTipoSocial, int id)
+        public async Task<bool> ModificarPersonaTipoSocial(PersonaTipoSocialDTO personaTipoSocial, int id)
         {
             bool sw = false;
             PersonaTipoSocial? existe = await contexto.PersonasTiposSociales.FindAsync(id);
@@ -62,10 +70,46 @@ namespace Coling.API.Afiliados.Implementacion
             return sw;
         }
 
-        public async Task<PersonaTipoSocial> ObtenerPersonaTipoSocialById(int id)
+        public async Task<PersonaTipoSocialDTO> ObtenerPersonaTipoSocialById(int id)
         {
             PersonaTipoSocial? personaTipoSocial = await contexto.PersonasTiposSociales.FirstOrDefaultAsync(x=>x.Id==id);
-            return personaTipoSocial;
+            PersonaTipoSocialDTO perTipoSocial = null!;
+            if (personaTipoSocial!=null)
+            {
+                perTipoSocial = new PersonaTipoSocialDTO();
+                perTipoSocial.Id = personaTipoSocial.Id;
+                perTipoSocial.IdPersona = personaTipoSocial.IdPersona;
+                perTipoSocial.IdTipoSocial = personaTipoSocial.IdTipoSocial;
+                perTipoSocial.Estado = personaTipoSocial.Estado;
+            }
+          
+            return perTipoSocial;
         }
+        public async Task<List<TipoSocialDTO>> BuscarPersonaTiposSociales(int idPersona)
+        {
+            var lista = await contexto.PersonasTiposSociales
+                              .Where(p=>p.IdPersona==idPersona)
+                              .Select(x => new TipoSocialDTO
+                              {
+                                  Id = x.Id,
+                                  IdPersona = x.IdPersona,
+                                  IdTipoSocial = x.IdTipoSocial,
+                                  NombreTipo=x.TipoSocial!.NombreSocial,
+                                  Estado = x.Estado,
+                              }).ToListAsync();
+            return lista;
+        }
+        public PersonaTipoSocial map(PersonaTipoSocialDTO personaTipoSocial) 
+        {
+            PersonaTipoSocial perTipoSocial = new PersonaTipoSocial();
+            perTipoSocial.IdPersona = personaTipoSocial.IdPersona;
+            perTipoSocial.IdTipoSocial = personaTipoSocial.IdTipoSocial;
+            perTipoSocial.Estado = personaTipoSocial.Estado;
+            perTipoSocial.Persona = null;
+            perTipoSocial.TipoSocial = null;
+            return perTipoSocial;
+        }
+
+       
     }
 }

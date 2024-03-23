@@ -18,7 +18,7 @@ namespace Coling.API.Curriculum.Implementacion.Repositorios
         public InstitucionRepositorio(IConfiguration conf) 
         {
             configuration = conf;
-            cadenaConexion = configuration.GetSection("cadenaconexion").Value;
+            cadenaConexion = Environment.GetEnvironmentVariable("cadenaconexion");
             tablaNombre = "Institucion";
         }
         public async Task<bool> Create(Institucion institucion)
