@@ -25,7 +25,7 @@ namespace Coling.API.Curriculum.EndPoints
         [Function("ListarExperiencia")]
         [OpenApiOperation("Listarspec", "ListarExperiencia", Description = "Sirve para listar todas las Experiencias Laborales")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(List<ExperienciaLaboral>), Description = "Mostrara una Lista de Experiencias Laborales")]
-        public async Task<HttpResponseData> ListarExperiencia([HttpTrigger(AuthorizationLevel.Function, "get", Route = "ListarExperiencia")] HttpRequestData req)
+        public async Task<HttpResponseData> ListarExperiencia([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ListarExperiencia")] HttpRequestData req)
         {
             HttpResponseData respuesta;
             try
@@ -47,7 +47,7 @@ namespace Coling.API.Curriculum.EndPoints
         [OpenApiOperation("Obtenerspec", "ObtenerExperienciaById", Description = "Sirve para obtener una Experiencia Laboral")]
         [OpenApiParameter(name: "rowkey", In = ParameterLocation.Path, Required = true, Type = typeof(string))]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ExperienciaLaboral), Description = "Mostrara una Experiencia Laboral")]
-        public async Task<HttpResponseData> ObtenerExperienciaById([HttpTrigger(AuthorizationLevel.Function, "get", Route = "ObtenerExperienciaById/{rowkey}")] HttpRequestData req, string rowkey)
+        public async Task<HttpResponseData> ObtenerExperienciaById([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "ObtenerExperienciaById/{rowkey}")] HttpRequestData req, string rowkey)
         {
             HttpResponseData respuesta;
             try
@@ -64,11 +64,32 @@ namespace Coling.API.Curriculum.EndPoints
                 return respuesta;
             }
         }
+        [Function("BuscarAfiliadoExperiencia")]
+        [OpenApiOperation("Buscarspec", "BuscarAfiliadoExperiencia", Description = "Sirve para listar todas las Experiencias Laborales de un Afiliado")]
+        [OpenApiParameter(name: "idAfiliado", In = ParameterLocation.Path, Required = true, Type = typeof(int))]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(List<ExperienciaLaboral>), Description = "Mostrara una Lista de Experiencias Laborales de un Afiliado")]
+        public async Task<HttpResponseData> BuscarAfiliadoExperiencia([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "BuscarAfiliadoExperiencia/{idAfiliado}")] HttpRequestData req,int idAfiliado)
+        {
+            HttpResponseData respuesta;
+            try
+            {
+                var lista = repos.BuscarAfiliadoExperiencia(idAfiliado);
+                respuesta = req.CreateResponse(HttpStatusCode.OK);
+                await respuesta.WriteAsJsonAsync(lista.Result);
+                return respuesta;
+            }
+            catch (Exception)
+            {
+
+                respuesta = req.CreateResponse(HttpStatusCode.InternalServerError);
+                return respuesta;
+            }
+        }
         [Function("InsertarExperiencia")]
         [OpenApiOperation("Insertarspec", "InsertarExperiencia", Description = "Sirve para Insertar una Experiencia Laboral")]
         [OpenApiRequestBody("application/json", typeof(ExperienciaLaboral), Description = "Experiencia Laboral modelo")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ExperienciaLaboral), Description = "Mostrara la Experiencia Laboral Creada")]
-        public async Task<HttpResponseData> InsertarExperiencia([HttpTrigger(AuthorizationLevel.Function, "post", Route = "InsertarExperiencia")] HttpRequestData req)
+        public async Task<HttpResponseData> InsertarExperiencia([HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "InsertarExperiencia")] HttpRequestData req)
         {
             HttpResponseData respuesta;
             try
@@ -99,7 +120,7 @@ namespace Coling.API.Curriculum.EndPoints
         [OpenApiOperation("Modificarspec", "ModificarExperiencia", Description = "Sirve para Modificar una Experiencia Laboral")]
         [OpenApiRequestBody("application/json", typeof(ExperienciaLaboral), Description = "Experiencia Laboral modelo")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(ExperienciaLaboral), Description = "Mostrara la Experiencia Laboral Modificada")]
-        public async Task<HttpResponseData> ModificarExperiencia([HttpTrigger(AuthorizationLevel.Function, "put", Route = "ModificarExperiencia")] HttpRequestData req)
+        public async Task<HttpResponseData> ModificarExperiencia([HttpTrigger(AuthorizationLevel.Anonymous, "put", Route = "ModificarExperiencia")] HttpRequestData req)
         {
             HttpResponseData respuesta;
             try
@@ -128,7 +149,7 @@ namespace Coling.API.Curriculum.EndPoints
         [OpenApiOperation("Eliminarspec", "EliminarExperiencia", Description = "Sirve para Eliminar una Experiencia Laboral")]
         [OpenApiParameter(name: "partitionkey", In = ParameterLocation.Path, Required = true, Type = typeof(string))]
         [OpenApiParameter(name: "rowkey", In = ParameterLocation.Path, Required = true, Type = typeof(string))]
-        public async Task<HttpResponseData> EliminarExperiencia([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "EliminarExperiencia/{partitionkey}/{rowkey}")] HttpRequestData req, string partitionkey, string rowkey)
+        public async Task<HttpResponseData> EliminarExperiencia([HttpTrigger(AuthorizationLevel.Anonymous, "delete", Route = "EliminarExperiencia/{partitionkey}/{rowkey}")] HttpRequestData req, string partitionkey, string rowkey)
         {
             HttpResponseData respuesta;
             try

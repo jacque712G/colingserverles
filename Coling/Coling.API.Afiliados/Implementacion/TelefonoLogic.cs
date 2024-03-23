@@ -1,4 +1,5 @@
 ﻿using Coling.API.Afiliados.Contratos;
+using Coling.API.Afiliados.DTO;
 using Coling.Shared;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -29,10 +30,10 @@ namespace Coling.API.Afiliados.Implementacion
             return sw;
         }
 
-        public async Task<bool> InsertarTelefono(Telefono telefono)
+        public async Task<bool> InsertarTelefono(TelefonoDTO telefono)
         {
             bool sw = false;
-            contexto.Telefonos.Add(telefono);
+            contexto.Telefonos.Add(map(telefono));
             int response = await contexto.SaveChangesAsync();
             if (response==1)
             {
@@ -41,13 +42,20 @@ namespace Coling.API.Afiliados.Implementacion
             return sw;
         }
 
-        public async Task<List<Telefono>> ListarTelefonoTodos()
+        public async Task<List<TelefonoDTO>> ListarTelefonoTodos()
         {
-            var lista = await contexto.Telefonos.ToListAsync();
+            var lista = await contexto.Telefonos
+                                      .Select(x=> new TelefonoDTO 
+                                      { 
+                                       Id= x.Id,
+                                       IdPersona= x.IdPersona,
+                                       NroTelefono= x.NroTelefono,
+                                       Estado= x.Estado
+                                      }).ToListAsync();
             return lista;
         }
 
-        public async Task<bool> ModificarTelefono(Telefono telefono, int id)
+        public async Task<bool> ModificarTelefono(TelefonoDTO telefono, int id)
         {
             bool sw = false;
             Telefono? existe = await contexto.Telefonos.FindAsync(id);
@@ -62,10 +70,44 @@ namespace Coling.API.Afiliados.Implementacion
             return sw;
         }
 
-        public async Task<Telefono> ObtenerTelefonoById(int id)
+        public async Task<TelefonoDTO> ObtenerTelefonoById(int id)
         {
             Telefono? telefono = await contexto.Telefonos.FirstOrDefaultAsync(x=>x.Id==id);
-            return telefono;
+            TelefonoDTO tel = null!;
+            if (telefono!=null)
+            {
+                tel = new TelefonoDTO();
+                tel.Id = telefono.Id;
+                tel.IdPersona = telefono.IdPersona;
+                tel.NroTelefono = telefono.NroTelefono;
+                tel.Estado = telefono.Estado;
+            }
+           
+            return tel;
+        }
+
+        public async Task<List<TelefonoDTO>> BuscarPersonaTelefonos(int idPersona)
+        {
+            var lista = await contexto.Telefonos
+                                      .Where(p=>p.IdPersona==idPersona)
+                                      .Select(x => new TelefonoDTO
+                                      {
+                                          Id = x.Id,
+                                          IdPersona = x.IdPersona,
+                                          NroTelefono = x.NroTelefono,
+                                          Estado = x.Estado
+                                      }).ToListAsync();
+            return lista;
+        }
+
+        public Telefono map(TelefonoDTO telefono) 
+        {
+            Telefono tel=new Telefono();
+            tel.IdPersona= telefono.IdPersona;
+            tel.NroTelefono = telefono.NroTelefono;
+            tel.Estado= telefono.Estado;
+            tel.Persona = null;
+            return tel;
         }
     }
 }

@@ -64,7 +64,7 @@ namespace Coling.API.Afiliados.Implementacion
         public async Task<TipoSocial> ObtenerTipoSocialById(int id)
         {
             TipoSocial? tipoSocial = await contexto.TiposSociales.FirstOrDefaultAsync(x=>x.Id==id);
-            return tipoSocial;
+            return tipoSocial!;
         }
     }
 }

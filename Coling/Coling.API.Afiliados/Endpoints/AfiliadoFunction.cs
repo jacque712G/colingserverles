@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Http;
+using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Extensions.Logging;
+using Microsoft.OpenApi.Models;
 using System.Net;
 
 namespace Coling.API.Afiliados.Endpoints
@@ -20,8 +22,10 @@ namespace Coling.API.Afiliados.Endpoints
             this._afiliadoLogic = _afiliadoLogic;
         }
 
-        [Function("ListarAfiliados")]
-        public async Task<HttpResponseData> ListarAfiliados([HttpTrigger(AuthorizationLevel.Function, "get", Route ="listarafiliados")] HttpRequestData req)
+        [Function("ListarAfiliados")]        
+        [OpenApiOperation("Listarspec", "ListarAfiliados", Description = "Sirve para listar todos los Afiliados")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(List<Afiliado>), Description = "Mostrara una Lista de Afiliados")]
+        public async Task<HttpResponseData> ListarAfiliados([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route ="listarafiliados")] HttpRequestData req)
         {
             _logger.LogInformation("Ejecutando Azure Function para Listar Afiliados");
             try
@@ -40,15 +44,27 @@ namespace Coling.API.Afiliados.Endpoints
             }
         }
         [Function("ObtenerAfiliadoById")]
-        public async Task<HttpResponseData> ObtenerAfiliadoById([HttpTrigger(AuthorizationLevel.Function,"get",Route = "obtenerAfiliadoById/{id}")] HttpRequestData req,int id) 
+        [OpenApiOperation("Obtenerspec", "ObtenerAfiliadoById", Description = "Sirve para obtener un Afiliado")]
+        [OpenApiParameter(name: "id", In = ParameterLocation.Path, Required = true, Type = typeof(int))]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Afiliado), Description = "Mostrara un Afiliado")]
+        public async Task<HttpResponseData> ObtenerAfiliadoById([HttpTrigger(AuthorizationLevel.Anonymous, "get",Route = "obtenerAfiliadoById/{id}")] HttpRequestData req,int id) 
         {
             _logger.LogInformation("Ejecutando Azure Function para Obtener a un Afiliado");
             try
             {
                 var afiliado = _afiliadoLogic.ObtenerAfiliadoById(id);
-                var respuesta = req.CreateResponse(HttpStatusCode.OK);
-                await respuesta.WriteAsJsonAsync(afiliado.Result);
-                return respuesta;
+                if (afiliado.Result!=null)
+                {
+                    var respuesta = req.CreateResponse(HttpStatusCode.OK);
+                    await respuesta.WriteAsJsonAsync(afiliado.Result);
+                    return respuesta;
+                }
+                else
+                {
+                    var respuesta = req.CreateResponse(HttpStatusCode.NotFound);
+                    return respuesta;
+                }
+                
             }
             catch (Exception e)
             {
@@ -59,7 +75,10 @@ namespace Coling.API.Afiliados.Endpoints
             }
         }
         [Function("InsertarAfiliado")]
-        public async Task<HttpResponseData> InsertarAfiliado([HttpTrigger(AuthorizationLevel.Function,"post",Route = "insertarAfiliado")] HttpRequestData req)         
+        [OpenApiOperation("Insertarspec", "InsertarAfiliado", Description = "Sirve para Insertar un Afiliado")]
+        [OpenApiRequestBody("application/json", typeof(Afiliado), Description = "Afiliado modelo")]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Afiliado), Description = "Mostrara el Afiliado Creado")]
+        public async Task<HttpResponseData> InsertarAfiliado([HttpTrigger(AuthorizationLevel.Anonymous, "post",Route = "insertarAfiliado")] HttpRequestData req)         
         {
             _logger.LogInformation("Ejecutando Azure Function para Insertar un Afiliado");
             try
@@ -68,7 +87,9 @@ namespace Coling.API.Afiliados.Endpoints
                 bool seGuardo = await _afiliadoLogic.InsertarAfiliado(afiliado);
                 if (seGuardo)
                 {
+                    var afiliadoCreado = _afiliadoLogic.ObtenerAfiliadoById(afiliado.Id);
                     var respuesta=req.CreateResponse(HttpStatusCode.OK);
+                    await respuesta.WriteAsJsonAsync(afiliadoCreado.Result);                    
                     return respuesta;
                 }
                 return req.CreateResponse(HttpStatusCode.BadRequest);
@@ -83,7 +104,11 @@ namespace Coling.API.Afiliados.Endpoints
             }
         }
         [Function("ModificarAfiliado")]
-        public async Task<HttpResponseData> ModificarAfiliado([HttpTrigger(AuthorizationLevel.Function,"put",Route = "modificarAfiliado/{id}")] HttpRequestData req, int id) 
+        [OpenApiOperation("Modificarspec", "ModificarAfiliado", Description = "Sirve para Modificar un Afiliado")]
+        [OpenApiRequestBody("application/json", typeof(Afiliado), Description = "Afiliado modelo")]
+        [OpenApiParameter(name: "id", In = ParameterLocation.Path, Required = true, Type = typeof(int))]
+        [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(Afiliado), Description = "Mostrara el Afiliado Modificado")]
+        public async Task<HttpResponseData> ModificarAfiliado([HttpTrigger(AuthorizationLevel.Anonymous, "put",Route = "modificarAfiliado/{id}")] HttpRequestData req, int id) 
         {
             _logger.LogInformation("Ejecutando Azure Function para Modificar un Afiliado");
             try
@@ -107,7 +132,9 @@ namespace Coling.API.Afiliados.Endpoints
         }
 
         [Function("EliminarAfiliado")]
-        public async Task<HttpResponseData> EliminarAfiliado([HttpTrigger(AuthorizationLevel.Function,"delete",Route = "eliminarAfiliado/{id}")]HttpRequestData req,int id) 
+        [OpenApiOperation("Eliminarspec", "EliminarAfiliado", Description = "Sirve para Eliminar un Estudio")]
+        [OpenApiParameter(name: "id", In = ParameterLocation.Path, Required = true, Type = typeof(int))]
+        public async Task<HttpResponseData> EliminarAfiliado([HttpTrigger(AuthorizationLevel.Anonymous, "delete",Route = "eliminarAfiliado/{id}")]HttpRequestData req,int id) 
         {
             _logger.LogInformation("Ejecutando Azure Function para Eliminar un Afiliado");
             try

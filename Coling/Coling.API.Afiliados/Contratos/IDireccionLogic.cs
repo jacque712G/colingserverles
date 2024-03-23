@@ -1,4 +1,5 @@
-﻿using Coling.Shared;
+﻿using Coling.API.Afiliados.DTO;
+using Coling.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,12 @@ namespace Coling.API.Afiliados.Contratos
 {
     public interface IDireccionLogic
     {
-        public Task<bool> InsertarDireccion(Direccion direccion);
-        public Task<bool> ModificarDireccion(Direccion direccion,int id);
+        public Task<bool> InsertarDireccion(DireccionDTO direccion);
+        public Task<bool> ModificarDireccion(DireccionDTO direccion,int id);
         public Task<bool> EliminarDireccion(int id);
-        public Task<List<Direccion>> ListarDireccionTodas();
-        public Task<Direccion> ObtenerDireccionById(int id);
+        public Task<List<DireccionDTO>> ListarDireccionTodas();
+        public Task<DireccionDTO> ObtenerDireccionById(int id);
+
+        public Task<List<DireccionDTO>> BuscarPersonaDirecciones(int idPersona);
     }
 }

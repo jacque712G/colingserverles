@@ -14,6 +14,9 @@ namespace Coling.Shared
         public int Id { get; set; }
         public int IdAfiliado { get; set; }
         public int IdIdioma { get; set; }
+
+        [Required(ErrorMessage = "El campo Estado es requerido")]
+        [StringLength(maximumLength: 20)]
         public string Estado { get; set; } = null!;
 
         [ForeignKey("IdAfiliado")]

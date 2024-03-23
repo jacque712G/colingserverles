@@ -19,10 +19,11 @@ namespace Coling.API.Curriculum.Implementacion.Repositorio
         public EstudiosRepositorio(IConfiguration conf) 
         {
             configuration = conf;
-            cadenaConexion = configuration.GetSection("cadenaconexion").Value;
+            cadenaConexion = Environment.GetEnvironmentVariable("cadenaconexion");
             tablaNombre = "Estudios";
 
-        }
+        }      
+
         public async Task<bool> Create(Estudios estudios)
         {
             try
@@ -70,8 +71,8 @@ namespace Coling.API.Curriculum.Implementacion.Repositorio
         public async Task<Estudios> GetById(string rowkey)
         {
             var tablaCliente = new TableClient(cadenaConexion, tablaNombre);
-            var estudios = await tablaCliente.GetEntityAsync<Estudios>("Academico", rowkey);
-            return estudios.Value;
+            Estudios estudios = await tablaCliente.GetEntityAsync<Estudios>("Academico", rowkey);
+            return estudios;
         }
 
         public async Task<bool> Update(Estudios estudios)
@@ -87,6 +88,18 @@ namespace Coling.API.Curriculum.Implementacion.Repositorio
 
                 return false;
             }
+        }
+        public async Task<List<Estudios>> BuscarAfiliadoEstudios(int idAfiliado)
+        {
+            List<Estudios> lista = new List<Estudios>();
+            var tablaCliente = new TableClient(cadenaConexion, tablaNombre);
+            var filtro = "IdAfiliado eq "+idAfiliado+"";
+            var estudios = tablaCliente.QueryAsync<Estudios>(filter: filtro);
+            await foreach (Estudios estudio in estudios)
+            {
+                lista.Add(estudio);
+            }
+            return lista;
         }
     }
 }

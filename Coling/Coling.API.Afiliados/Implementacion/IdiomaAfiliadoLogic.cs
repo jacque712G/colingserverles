@@ -1,4 +1,5 @@
 ﻿using Coling.API.Afiliados.Contratos;
+using Coling.API.Afiliados.DTO;
 using Coling.Shared;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -29,10 +30,10 @@ namespace Coling.API.Afiliados.Implementacion
             return sw;
         }
 
-        public async Task<bool> InsertarIdiomaAfiliado(IdiomaAfiliado idiomaAfiliado)
+        public async Task<bool> InsertarIdiomaAfiliado(IdiomaAfiliadoDTO idiomaAfiliado)
         {
             bool sw = false;
-            contexto.IdiomasAfiliados.Add(idiomaAfiliado);
+            contexto.IdiomasAfiliados.Add(map(idiomaAfiliado));
             int response = await contexto.SaveChangesAsync();
             if (response==1)
             {
@@ -41,20 +42,27 @@ namespace Coling.API.Afiliados.Implementacion
             return sw;
         }
 
-        public async Task<List<IdiomaAfiliado>> ListarIdiomaAfiliadoTodos()
+        public async Task<List<IdiomaAfiliadoDTO>> ListarIdiomaAfiliadoTodos()
         {
-            var lista = await contexto.IdiomasAfiliados.ToListAsync();
+            var lista = await contexto.IdiomasAfiliados
+                              .Select(x=>new IdiomaAfiliadoDTO 
+                              {
+                               Id=x.Id,
+                               IdAfiliado=x.IdAfiliado,
+                               IdIdioma=x.IdIdioma,
+                               Estado=x.Estado
+                              }).ToListAsync();
             return lista;
         }
 
-        public async Task<bool> ModificarIdiomaAfiliado(IdiomaAfiliado idiomaAfiliado, int id)
+        public async Task<bool> ModificarIdiomaAfiliado(IdiomaAfiliadoDTO idiomaAfiliado, int id)
         {
             bool sw = false;
             IdiomaAfiliado? existe = await contexto.IdiomasAfiliados.FindAsync(id);
             if (existe != null)
             {
                 existe.IdAfiliado = idiomaAfiliado.IdAfiliado;
-                existe.Idioma = idiomaAfiliado.Idioma;
+                existe.IdIdioma = idiomaAfiliado.IdIdioma;
                 existe.Estado = idiomaAfiliado.Estado;
 
                 await contexto.SaveChangesAsync();
@@ -63,10 +71,46 @@ namespace Coling.API.Afiliados.Implementacion
             return sw;
         }
 
-        public async Task<IdiomaAfiliado> ObtenerIdiomaAfiliadoById(int id)
+        public async Task<IdiomaAfiliadoDTO> ObtenerIdiomaAfiliadoById(int id)
         {
             IdiomaAfiliado? idiomaAfiliado = await contexto.IdiomasAfiliados.FirstOrDefaultAsync(x=>x.Id==id);
-            return idiomaAfiliado;
+            IdiomaAfiliadoDTO idiomaAfil =null!;
+            if (idiomaAfiliado!=null)
+            {
+                idiomaAfil = new IdiomaAfiliadoDTO();
+                idiomaAfil.Id = idiomaAfiliado!.Id;
+                idiomaAfil.IdAfiliado = idiomaAfiliado.Id;
+                idiomaAfil.IdIdioma = idiomaAfiliado.IdAfiliado;
+                idiomaAfil.Estado = idiomaAfiliado.Estado;
+            }
+           
+            return idiomaAfil;
         }
+        public async Task<List<IdiomaDTO>> BuscarAfiliadoIdiomas(int idAfiliado)
+        {
+            var lista = await contexto.IdiomasAfiliados
+                              .Where(a=>a.IdAfiliado==idAfiliado)
+                              .Select(x => new IdiomaDTO
+                              {
+                                  Id = x.Id,
+                                  IdAfiliado = x.IdAfiliado,
+                                  IdIdioma = x.IdIdioma,
+                                  NombreIdioma=x.Idioma!.NombreIdioma,
+                                  Estado = x.Estado
+                              }).ToListAsync();
+            return lista;
+        }
+        public IdiomaAfiliado map(IdiomaAfiliadoDTO idiomaAfiliado) 
+        {
+            IdiomaAfiliado idiomaAfil=new IdiomaAfiliado();
+            idiomaAfil.IdAfiliado = idiomaAfiliado.IdAfiliado;
+            idiomaAfil.IdIdioma = idiomaAfiliado.IdIdioma;
+            idiomaAfil.Estado = idiomaAfiliado.Estado;
+            idiomaAfil.Idioma = null;
+            idiomaAfil.Afiliado = null;
+            return idiomaAfil;
+        }
+
+       
     }
 }

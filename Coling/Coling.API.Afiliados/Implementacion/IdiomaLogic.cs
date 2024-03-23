@@ -64,7 +64,7 @@ namespace Coling.API.Afiliados.Implementacion
         public async Task<Idioma> ObtenerIdiomaById(int id)
         {
             Idioma? idioma = await contexto.Idiomas.FirstOrDefaultAsync(x=>x.Id==id);
-            return idioma;
+            return idioma!;
         }
     }
 }
