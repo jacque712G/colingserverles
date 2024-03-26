@@ -4,7 +4,8 @@
       "commandName": "Project",
       "commandLineArgs": "--port 7077",
       "environmentVariables": {
-        "cadenaconexion": "BlobEndpoint=https://colingguerrerobd.blob.core.windows.net/;QueueEndpoint=https://colingguerrerobd.queue.core.windows.net/;FileEndpoint=https://colingguerrerobd.file.core.windows.net/;TableEndpoint=https://colingguerrerobd.table.core.windows.net/;SharedAccessSignature=sv=2022-11-02&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2024-06-01T23:12:04Z&st=2024-03-15T15:12:04Z&spr=https&sig=a3BEzpV63lMnTzRMpvKJgcRoI87ugJiHfxa5Ziyz21I%3D"
+        "cadenaconexion": "BlobEndpoint=https://colingguerrerobd.blob.core.windows.net/;QueueEndpoint=https://colingguerrerobd.queue.core.windows.net/;FileEndpoint=https://colingguerrerobd.file.core.windows.net/;TableEndpoint=https://colingguerrerobd.table.core.windows.net/;SharedAccessSignature=sv=2022-11-02&ss=bfqt&srt=sco&sp=rwdlacupiytfx&se=2024-06-01T23:12:04Z&st=2024-03-15T15:12:04Z&spr=https&sig=a3BEzpV63lMnTzRMpvKJgcRoI87ugJiHfxa5Ziyz21I%3D",
+        "LlaveSecreta": "JG344KDSNSDMKShfhfh44644fghfghdggfg"
       }
     }
   }

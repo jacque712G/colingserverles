@@ -3,7 +3,9 @@
     "Coling.API.Afiliados": {
       "commandName": "Project",
       "commandLineArgs": "--port 7045",
-      "launchBrowser": false
+      "environmentVariables": {
+        "LlaveSecreta": "JG344KDSNSDMKShfhfh44644fghfghdggfg"
+      }
     }
   }
 }
