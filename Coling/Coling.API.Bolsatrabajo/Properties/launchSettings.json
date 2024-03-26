@@ -2,7 +2,10 @@
   "profiles": {
     "Coling.API.Bolsatrabajo": {
       "commandName": "Project",
-      "commandLineArgs": "--port 7092"
+      "commandLineArgs": "--port 7092",
+      "environmentVariables": {
+        "LlaveSecreta": "JG344KDSNSDMKShfhfh44644fghfghdggfg"
+      }
     }
   }
 }

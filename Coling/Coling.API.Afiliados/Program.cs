@@ -8,10 +8,10 @@ using Microsoft.Extensions.Configuration;
 using Coling.API.Afiliados.Contratos;
 using Coling.API.Afiliados.Implementacion;
 using Coling.Shared;
+using Coling.Utilitarios.Middlewares;
 
 
 var host = new HostBuilder()
-    .ConfigureFunctionsWebApplication()
     .ConfigureServices(services =>
     {
         var configuration = new ConfigurationBuilder()
@@ -33,10 +33,14 @@ var host = new HostBuilder()
         services.AddScoped<IProfesionAfiliadoLogic, ProfesionAfiliadoLogic>();
         services.AddScoped<IIdiomaLogic, IdiomaLogic>();
         services.AddScoped<IIdiomaAfiliadoLogic, IdiomaAfiliadoLogic>();
+		services.AddSingleton<JWTMiddleware>();
 
-
-    })
-    .Build();
+	}).ConfigureFunctionsWebApplication(x =>
+	{
+		x.UseMiddleware<JWTMiddleware>();
+	}
+	)
+	.Build();
 
 host.Run();
 

@@ -26,7 +26,7 @@ namespace Coling.API.Afiliados.Endpoints
         [Function("ListarDirecciones")]
         [OpenApiOperation("Listarspec", "ListarDirecciones", Description = "Sirve para listar todos las Direcciones")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "application/json", bodyType: typeof(List<DireccionDTO>), Description = "Mostrara una Lista de Direcciones")]
-        public async Task<HttpResponseData> ListarDirecciones([HttpTrigger(AuthorizationLevel.Anonymous, "get", Route ="listardirecciones")] HttpRequestData req)
+        public async Task<HttpResponseData> ListarDirecciones([HttpTrigger(AuthorizationLevel.Function, "get", Route ="listardirecciones")] HttpRequestData req)
         {
             _logger.LogInformation("Ejecutando Azure Function para Listar Direcciones");
             try
